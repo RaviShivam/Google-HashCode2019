@@ -75,7 +75,7 @@ def find_best_slideshow(fn):
       return individual
 
     slides_merged = get_merged_slides(parse_file(fn))
-    ga = pyeasyga.GeneticAlgorithm(slides_merged, generations=2)
+    ga = pyeasyga.GeneticAlgorithm(slides_merged, generations=10)
     ga.fitness_function = fitness
     ga.create_individual = create_individual 
     ga.mutate_function = mutate
