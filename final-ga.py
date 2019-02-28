@@ -36,8 +36,9 @@ def get_merged_slides(photos):
     slides = []
     for i in range(len(vert_only)):
         for j in range(i+1, len(vert_only)):
+            inter = vert_only[i][2] & vert_only[j][2]
             tags = vert_only[i][2] | vert_only[j][2]
-            new_slide = (vert_only[i][0], vert_only[j][0], 'V', tags, len(tags))
+            new_slide = (vert_only[i][0], vert_only[j][0], 'V', tags, len(inter))
             slides.append(new_slide)
 
     slides.sort(key = operator.itemgetter(4))
@@ -75,7 +76,7 @@ def find_best_slideshow(fn):
       return individual
 
     slides_merged = get_merged_slides(parse_file(fn))
-    ga = pyeasyga.GeneticAlgorithm(slides_merged, generations=10)
+    ga = pyeasyga.GeneticAlgorithm(slides_merged, generations=1)
     ga.fitness_function = fitness
     ga.create_individual = create_individual 
     ga.mutate_function = mutate
@@ -94,7 +95,9 @@ def write_to_file(fn, sol):
 # In[ ]:
 
 
-all_files = ['a_example.txt', 'b_lovely_landscapes.txt', 'c_memorable_moments.txt', 'd_pet_pictures.txt', 'e_shiny_selfies.txt']
+# all_files = ['a_example.txt', 'b_lovely_landscapes.txt', 'c_memorable_moments.txt', 'd_pet_pictures.txt', 'e_shiny_selfies.txt']
+# all_files = ['a_example.txt', 'b_lovely_landscapes.txt', 'c_memorable_moments.txt']
+all_files = ['e_shiny_selfies.txt']
 for f in tqdm(all_files):
     solution = find_best_slideshow(f)
     write_to_file('solutions/{}'.format(f), solution)

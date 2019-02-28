@@ -29,7 +29,7 @@ def get_score(slide1, slide2):
 def total_score(slideshow):
   score = 0
   for i in range(1, len(slideshow)):
-    score += get_score(slideshow[i-1], slideshow[i])
+    score += get_score(photos[slideshow[i-1]], photos[slideshow[i]])
   return score
 
 def mapall():
@@ -53,6 +53,14 @@ def choose_next(startindex):
           max_score = score
     return maxi, max_score
 
+def find_tag(new):
+  for n in new:
+    (_, _, tags) = photos[n]
+    for tag in tags:
+      if tag in ds:
+        return tag
+
+
 # print(choose_next(0))
 # print(get_score(photos[0], photos[3]))
 mapall()
@@ -62,32 +70,23 @@ for k, v in tag_to_id.items():
   if len(v) > 2:
     bigbois.append((k, v))
     # print("{:>10}".format(k), "  " + str(v))
-
 s = sorted(bigbois, key=lambda x: len(x[1]))
-s = dict(s)
+ds = dict(s)
+# s = dict(s)
 # for k, v in s:
-#     print("{:>10}".format(k), "  " + str(v))
-slideshow = [0]
+    # print("{:>10}".format(k), "  " + str(v))
+print(len(s))
+slideshow = s[-1]
+
+print(slideshow)
+exit()
 added = {}
 c = 0
 
-while True:
-  print('Slide {}'.format(slideshow[-1]))
-  # if slideshow[-1] not in s:
-  #   break
-  tags = photos[slideshow[-1]][2]
-  ids = bigbois[tag]
 
-  sids = sorted(ids, key=lambda x: len(photos[x][2]))
-  for id in sids:
-    if id not in added:
-      slideshow.append(id)
-      added[id] = True
-  c += 1
-  # print(total_score(slideshow))
-  # if c == 5: break
 
 # print(slideshow)
 
 print(len(slideshow))
-print(total_score(slideshow))
+print(slideshow)
+# print(total_score(slideshow))
