@@ -26,6 +26,12 @@ def get_score(slide1, slide2):
   (_, _, s2) = slide2
   return min(len(s1 - s2), len(s1 & s2), len(s2 - s1))
 
+def total_score(slideshow):
+  score = 0
+  for i in range(1, len(slideshow)):
+    score += get_score(slideshow[i-1], slideshow[i])
+  return score
+
 def mapall():
   for (i, pos, tags) in photos:
     for tag in tags:
@@ -51,7 +57,37 @@ def choose_next(startindex):
 # print(get_score(photos[0], photos[3]))
 mapall()
 
-c = 0
+bigbois = []
 for k, v in tag_to_id.items():
+  if len(v) > 2:
+    bigbois.append((k, v))
+    # print("{:>10}".format(k), "  " + str(v))
+
+s = sorted(bigbois, key=lambda x: len(x[1]))
+s = dict(s)
+# for k, v in s:
+#     print("{:>10}".format(k), "  " + str(v))
+slideshow = [0]
+added = {}
+c = 0
+
+while True:
+  print('Slide {}'.format(slideshow[-1]))
+  # if slideshow[-1] not in s:
+  #   break
+  tags = photos[slideshow[-1]][2]
+  ids = bigbois[tag]
+
+  sids = sorted(ids, key=lambda x: len(photos[x][2]))
+  for id in sids:
+    if id not in added:
+      slideshow.append(id)
+      added[id] = True
   c += 1
-  print("{:>10}".format(k), v)
+  # print(total_score(slideshow))
+  # if c == 5: break
+
+# print(slideshow)
+
+print(len(slideshow))
+print(total_score(slideshow))

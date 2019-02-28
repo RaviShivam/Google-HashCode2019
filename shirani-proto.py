@@ -1,48 +1,3 @@
-# lines = open("b_lovely_landscapes.txt").readlines()
-
-# # Global variable
-# N = int(lines[0]) # number of photos
-# photos = [] # (i :int , pos, tags: set[string]) where pos is V or H
-
-# for (i, line) in enumerate(lines[1:]):
-#   items = line.replace("\n", "").split(" ")
-#   pos = items[0]
-#   size = int(items[1])
-#   tags = set(items[2:])
-#   photos.append((i, pos, tags))
-
-
-# # def get_score(slide1, slide2):
-# #   (_, _, s1) = slide1
-# #   (_, _, s2) = slide1
-# #   return min(len(s1 - s2), len(s1 & s2), len(s2-s1))
-
-# # def choose_next(startindex):
-# #     slide0 = photos[startindex]
-# #     (i, pos, tags) = slide0
-# #     for tag in tags:
-# #         if tags & 
- 
-
-# # # print(choose_next(0))
-# # print(get_score(photos[0], photos[3]))
-        
-# slideshow = [photos[0]]
-# idtoslide = {}
-
-# while True:
-#   _,_,tags0 = slideshow[-1]
-#   for photo in photos:
-#       i, pos, tags = photo
-#       if i in idtoslide: continue
-
-#       if len(tags & tags0) > 0 and pos == 'H':
-#           slideshow.append(photo)
-
-
-# for s in slideshow:
-#   print(s[0])
-
 import sys
 file = "a_example.txt" if len(sys.argv) == 1 else sys.argv[1]
 lines = open(file).readlines()
@@ -96,7 +51,30 @@ def choose_next(startindex):
 # print(get_score(photos[0], photos[3]))
 mapall()
 
-c = 0
+bigbois = []
 for k, v in tag_to_id.items():
-  c += 1
-  print("{:>10}".format(k), v)
+  if len(v) > 2:
+    bigbois.append((k, v))
+    # print("{:>10}".format(k), "  " + str(v))
+
+s = sorted(bigbois, key=lambda x: len(x[1]))
+for k, v in s:
+    print("{:>10}".format(k), "  " + str(v))
+slideshow = [0]
+added = {}
+c = 0
+
+# while True:
+#   print('Slide {}'.format(slideshow[-1]))
+#   tag, ids = s[slideshow[-1]]
+#   sids = sorted(ids, key=lambda x: len(photos[x][2]))
+#   for id in sids:
+#     if id not in added:
+#       slideshow.append(id)
+#       added[id] = True
+#   c += 1
+#   if c == 2: break
+
+print(slideshow)
+
+
