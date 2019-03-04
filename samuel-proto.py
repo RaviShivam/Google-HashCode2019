@@ -80,12 +80,6 @@ slideshow = s[-1]
 
 print(slideshow)
 exit()
-added = {}
-c = 0
-
-
-
-# print(slideshow)
 
 print(len(slideshow))
 print(slideshow)
