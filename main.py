@@ -14,7 +14,6 @@ def get_score(slide1, slide2):
 def parse_file(fn):
     lines = open(fn).readlines()
     photos = [] # (i :int , pos, tags: set[string]) where pos is V or H
-
     for (i, line) in enumerate(lines[1:]):
       items = line.replace("\n", "").split(" ")
       pos = items[0]
@@ -22,6 +21,7 @@ def parse_file(fn):
       photos.append((i, pos, tags))
     return photos
 
+# Merge vertical image with horizontal for full gallery
 def get_merged_slides(photos):
     vert_only = [(x[0], x[1], x[2], len(x[2])) for x in photos if x[1] == 'V']
     vert_only.sort(key = operator.itemgetter(3))
@@ -49,24 +49,25 @@ def get_merged_slides(photos):
     slides_merged = [(str(x[0]), x[1], x[2], len(x[2])) for x in photos if x[1] == 'H'] + slides_filtered
     return slides_merged
 
+# Find the best slideshow order of horizontal-vertical images
 def find_best_slideshow(fn):
     slides_merged = get_merged_slides(parse_file(fn))
     slides_merged.sort(key = operator.itemgetter(3))
-    print("found merged slides")
-    remaining_slides = slides_merged[:]
-    slideshow = [remaining_slides.pop(0)]
-    while True:
-      c, best_i, best_score = 1000, -1, -1
-      for ci, slide in enumerate(remaining_slides):
-        if c == 0: break
-        if get_score(slide, slideshow[-1]) > best_score:
-          best_i = ci
-          best_score = get_score(slideshow[-1], slide)
-        c -= 1
-      slideshow.append(remaining_slides.pop(best_i))
-      if len(remaining_slides) % 1000 == 0: print(len(remaining_slides))
-      if (len(remaining_slides)==0): break
-    return slideshow
+    return slides_merged
+    # remaining_slides = slides_merged[:]
+    # slideshow = [remaining_slides.pop(0)]
+    # while True:
+    #   c, best_i, best_score = 1000, -1, -1
+    #   for ci, slide in enumerate(remaining_slides):
+    #     if c == 0: break
+    #     if get_score(slide, slideshow[-1]) > best_score:
+    #       best_i = ci
+    #       best_score = get_score(slideshow[-1], slide)
+    #     c -= 1
+    #   slideshow.append(remaining_slides.pop(best_i))
+    #   if len(remaining_slides) % 1000 == 0: print(len(remaining_slides))
+    #   if (len(remaining_slides)==0): break
+    # return slideshow
 
 def write_to_file(fn, sol):
     myfile = open(fn, 'w')
@@ -84,5 +85,5 @@ all_files = ['a_example.txt', 'b_lovely_landscapes.txt', 'c_memorable_moments.tx
 # all_files = ['d_pet_pictures.txt']
 # all_files = ['e_shiny_selfies.txt']
 for f in all_files:
-    solution = find_best_slideshow(f)
-    write_to_file('solutions/{}'.format(f), os.join('problems', solution))
+    solution = find_best_slideshow(os.path.join('problems', f))
+    write_to_file('solutions/{}'.format(f), solution)
